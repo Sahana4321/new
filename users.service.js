@@ -2,8 +2,8 @@ const db = require("../config/db.config");
 
 exports.register = (data, callback) => {
   db.query(
-    `INSERT INTO users (firstName, lastName, emailId, password) VALUES (?, ?, ?, ?)`,
-    [data.firstName, data.lastName, data.emailId, data.password],
+      `INSERT INTO users(firstName , lastName, emailId, password, status,role, type) VALUES (?,?,?,?,?,?,?)`,
+      [data.firstName, data.lastName, data.emailId, data.password,data.status,data.role,data.type],
     (error, results, fields) => {
       if (error) {
         return callback(error);
