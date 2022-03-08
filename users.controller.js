@@ -1,12 +1,15 @@
 const usersService = require("../services/users.service");
 
 exports.register = (req, res, next) => {
-  // Validation area
+  // Validation 
   const data = {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     emailId: req.body.emailId,
     password: req.body.password,
+    status: req.body.status,
+    role: req.body.role,
+    type: req.body.type,
   };
   usersService.register(data, (error, results) => {
     if (error) {
