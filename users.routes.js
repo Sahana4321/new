@@ -9,7 +9,7 @@ router.post("/register", usersController.register);
  * @swagger
  * /users/register:
  *   post:
- *      description: Used to register user
+ *      description: User Registration
  *      tags:
  *          - users
  *      parameters:
@@ -23,34 +23,45 @@ router.post("/register", usersController.register);
  *                 - lastName
  *                 - emailId
  *                 - password
+ *                 - status
+ *                 - role
+ *                 - type
  *              properties:
  *                  firstName:
  *                      type: string
  *                      minLength: 1
  *                      maxLength: 45
- *                      example: Navin
+ *                      
  *                  lastName:
  *                      type: string
  *                      minLength: 1
  *                      maxLength: 45
- *                      example: Balla
+ *                     
  *                  emailId:
  *                      type: string
  *                      minLength: 1
  *                      maxLength: 100
- *                      example: navin@sample.com
+ *                     
  *                  password:
  *                      type: string
  *                      minLength: 1
  *                      maxLength: 45
- *                      example: abcd
+ * 
+ *                  status:
+ *                      type: string
+ *                  
+ *                  role:
+ *                      type: string
+ * 
+ *                  type:
+ *                      type: boolean
+ *                     
  *      responses:
  *          '200':
- *              description: Resource added successfully
- *          '500':
- *              description: Internal server error
+ *              description: Registered successfully
  *          '400':
- *              description: Bad request
+ *              description: Kindly fill the details correctly
+ *          
  */
 
 router.post("/login", usersController.login);
@@ -64,30 +75,31 @@ router.post("/login", usersController.login);
  *      parameters:
  *          - in: body
  *            name: User
- *            description: User data
+ *            description: User login
  *            schema:
  *              type: object
  *              required:
  *                 - emailId
  *                 - password
+ *                
  *              properties:
  *                  emailId:
  *                      type: string
  *                      minLength: 1
  *                      maxLength: 100
- *                      example: navin@sample.com
+ *                     
  *                  password:
  *                      type: string
  *                      minLength: 1
  *                      maxLength: 45
- *                      example: abcd
+ * 
+ *                 
  *      responses:
  *          '200':
- *              description: Resource added successfully
- *          '500':
- *              description: Internal server error
+ *              description: Login successfully
  *          '400':
- *              description: Bad request
+ *              description: Invalid credentials
+ *         
  */
 
 module.exports = router;
