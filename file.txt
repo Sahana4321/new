@@ -33,6 +33,155 @@ class App extends React.Component
         var data = event.target.value
         var id = event.target.id
         //console.log(data,id)
+        
+        
+        //=--=============================================================================================
+        const { request } = require('express');
+const { json } = require('express/lib/response');
+const winston= require('winston');
+const express = require ('express');
+const router = express.Router();
+const {createLogger, transports,format,meta}= require('winston');
+const { timeStamp } = require('console');
+const bodyParser = require('body-parser');
+const { url } = require('inspector');
+const { combine, timestamp, label, prettyPrint ,printf} = format;
+var jsonParser = bodyParser.json()
+var urleccodedParser= bodyParser.urlencoded({extended: false});
+const http=require('http');
+var address = require('address');
+let mydate = new Date();
+let newFilename = "logs/" + "_" + mydate.getFullYear() + "-" + mydate.getMonth() + "-" + mydate.getDate() + "-" + "success.log";
+const {method,message}=request;
+
+router.post('/post/success/:id', jsonParser, (req,res)=>{
+function success(){
+    let url = req.protocol + ".//"+ req.get('host') +req.originalUrl;
+       logger.info("Message : Sample API ");
+       logger.info("REQUEST ID :"+req.params.id);
+       logger.info("CLIENT IP ADDRESS: "+address.ip());
+       logger.info("URL:"+url);
+       logger.info("METHOD:"+req.method);
+logger.info("HTTP_REQUEST_BODY:",(req.body));
+res.status(200).json({"Message":"Success"});
+logger.info("HTTP_STATUS_CODE :"+res.statusCode);
+logger.info("HTTP_RESPONSE_MESSAGE:", (req.json,{"message":"Success"}));
+}
+success();
+});
+const logger = createLogger({
+    transports:[
+        new transports.File({
+            filename:newFilename,
+            level:'info',
+            meta:true,
+            colorize: true,
+            format: combine(
+             timestamp(),
+            //  winston.format.printf(info =>  ` ${info.level} ${info.timestamp}  Message : ${info.message}
+            //  ${info.timestamp}  Url : ${(url)}
+            //  ${info.timestamp}  Method : ${info.method}
+            //  ${info.timestamp}  HTTP_Request_Body : ${info. HTTP_Request_Body}
+            //  ${info.timestamp}  HTTP_Response_Message : ${info. HTTP_Response_Message}
+            //  ${info.timestamp}  HTTP_Response : ${info. HTTP_Response} `),
+           
+           winston.format.printf(info => {
+           return `level : ${info.level}  ${info.timestamp}  ${JSON.stringify(info.message)}`;
+          
+             })
+           )
+        })
+      
+    ]
+  
+});
+module.exports = router;//success.js
+
+
+error.js
+const { request } = require('express');
+const { json } = require('express/lib/response');
+const winston= require('winston');
+const express = require ('express');
+const router = express.Router();
+var address= require('address');
+const fs = require ('fs');
+const {createLogger, transports,format,meta}= require('winston');
+const { timeStamp } = require('console');
+const bodyParser = require('body-parser');
+const { url } = require('inspector');
+const { combine, timestamp, label, prettyPrint ,printf} = format;
+var jsonParser = bodyParser.json()
+var urleccodedParser= bodyParser.urlencoded({extended: false});
+const http=require('http');
+let mydate = new Date();
+let newFilename = "logs/" + "_" + mydate.getFullYear() + "-" + mydate.getMonth() + "-" + mydate.getDate() + "-" + "error.log";
+const {method,message}=request;
+
+router.post('/post/error/:id', jsonParser, (req,res)=>{
+function error(){
+   let url = req.protocol + ".//"+ req.get('host') +req.originalUrl;
+    logger.error("Message : Sample API Calling");
+    logger.error("REQUEST ID :"+req.params.id);
+    logger.info("CLIENT IP ADDRESS: "+address.ip());
+    logger.error("URL:"+url);
+    logger.error("METHOD:"+req.method);
+logger.error("HTTP_REQUEST_BODY:",(req.body));
+res.status(400).json({"Message":"Error"});
+logger.error("HTTP_STATUS_CODE :"+res.statusCode);
+logger.error("HTTP_RESPONSE_MESSAGE:", (req.json,{"message":"Error"}));
+}
+error();
+ });
+const logger = createLogger({
+    transports:[
+        new transports.File({
+            filename:newFilename,
+            level:'error',
+            meta:true,
+            colorize: true,
+            format: combine(
+             timestamp(),
+            //  winston.format.printf(info => `${info.timestamp}  Message : ${info.message}
+            //  ${info.timestamp}  Url : ${info.url}
+            //  ${info.timestamp}  Method : ${info.method}
+            //  ${info.timestamp}  HTTP_Request_Body : ${info. HTTP_Request_Body}
+            //  ${info.timestamp}  HTTP_Response_Message : ${info. HTTP_Response_Message}
+            //  ${info.timestamp}  HTTP_Response : ${info. HTTP_Response} `),
+           
+           winston.format.printf(info => {
+           return `level : ${info.level} ,${info.timestamp}   , ${JSON.stringify(info.message)}`;
+          
+             })
+             )
+        })
+    ]
+  
+});
+module.exports = router;
+''
+index.js
+
+
+const express = require ('express');
+
+const bodyParser = require('body-parser');
+const app = express();
+app.use(bodyParser.json());
+// const updateSuccessRoutes= require('./routes/updateSuccess');
+const errorRoutes= require('./routes/error');
+const successRoutes= require('./routes/success');
+
+app.use(bodyParser.urlencoded({extended:true}))
+
+app.listen(3000);
+console.log("log details")
+// app.use('/user', updateSuccessRoutes);
+ app.use('/user',errorRoutes);
+app.use('/user',successRoutes);
+
+
+
         var status = this.state.employees.find((emp)=>emp[id]==data)!=undefined;        
 
         var msg = `Duplicate Value found in ${id} !`
